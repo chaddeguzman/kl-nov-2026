@@ -202,6 +202,6 @@ dialog.rail-dialog {
 
 .stop-card.has-photo{grid-template-columns:42px minmax(0,1fr) 12px}.activity-thumb{display:block;width:42px;height:36px;object-fit:cover;border-radius:5px}
 
-/* Supplied transparent brand mark; the adjacent wordmark remains readable text. */
-.brand{display:flex;align-items:center;gap:10px;min-width:0}.brand-logo{display:block;width:38px;height:40px;object-fit:contain;flex:none}.brand-logo[hidden]{display:none}
-@media(max-width:599px){.brand{gap:8px}.brand-logo{width:29px;height:30px}}
+/* Supplied full wordmark image, with accessible text retained for screen readers. */
+.brand{display:flex;align-items:center;gap:10px;min-width:0}.brand-logo{display:block;width:180px;height:60px;object-fit:contain;flex:none}.brand .wordmark{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}.brand-logo[hidden]{display:none}
+@media(max-width:599px){.brand{gap:8px}.brand-logo{width:144px;height:48px}}

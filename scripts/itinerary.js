@@ -77,7 +77,7 @@
     document.title = data.copy.documentTitle;
     if (data.brand?.src) {
       const logo = document.getElementById('brand-logo');
-      logo.src = data.brand.src;
+      logo.src = data.brand.headerSrc || data.brand.src;
       logo.hidden = false;
       document.getElementById('site-icon').setAttribute('href', data.brand.src);
     }
