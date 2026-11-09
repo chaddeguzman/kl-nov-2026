@@ -1,6 +1,26 @@
 /* Offline itinerary controls. Travel facts live in the source itinerary. */
 (() => {
   'use strict';
+  const themeKey = 'reminiscence-kl-2026:theme:v1';
+  const themeToggle = document.getElementById('theme-toggle');
+  const systemTheme = matchMedia('(prefers-color-scheme: dark)');
+  let chosenTheme;
+  try { chosenTheme = localStorage.getItem(themeKey); } catch {}
+  if (!['light', 'dark'].includes(chosenTheme)) chosenTheme = null;
+  function applyTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+    themeToggle.setAttribute('aria-checked', String(theme === 'dark'));
+    themeToggle.title = theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme';
+  }
+  applyTheme(chosenTheme || (systemTheme.matches ? 'dark' : 'light'));
+  themeToggle.addEventListener('click', () => {
+    chosenTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    applyTheme(chosenTheme);
+    try { localStorage.setItem(themeKey, chosenTheme); } catch { /* Switching still works without storage. */ }
+  });
+  systemTheme.addEventListener('change', () => {
+    if (!chosenTheme) applyTheme(systemTheme.matches ? 'dark' : 'light');
+  });
   const data = JSON.parse(document.getElementById('itinerary-data').textContent);
   const tabs = document.getElementById('day-tabs');
   const columns = document.getElementById('columns');

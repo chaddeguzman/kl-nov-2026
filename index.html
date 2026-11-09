@@ -7,6 +7,15 @@
   <meta name="description" content="Six days in Kuala Lumpur. A compact, offline itinerary for four friends, November 29 to December 4, 2026.">
   <title>Reminiscence · Kuala Lumpur 2026</title>
   <link id="site-icon" rel="icon" type="image/png" href="assets/images/reminiscence-logo.png">
+  <script id="theme-init">
+    // Set the visitor's theme before the page is painted; exports share this preference.
+    (() => {
+      let theme;
+      try { theme = localStorage.getItem('reminiscence-kl-2026:theme:v1'); } catch {}
+      document.documentElement.dataset.theme = theme === 'dark' || theme === 'light'
+        ? theme : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    })();
+  </script>
   <link rel="stylesheet" href="./css/itinerary.css">
 
 </head>
@@ -14,6 +23,9 @@
   <div class="page">
     <header class="masthead">
       <div class="brand"><img id="brand-logo" class="brand-logo" alt="" aria-hidden="true" src="assets/images/reminiscence-wordmark.png"><span class="wordmark">Reminiscence</span></div>
+      <button type="button" id="theme-toggle" class="theme-toggle" role="switch" aria-label="Dark mode" aria-checked="false" title="Switch to dark theme">
+        <span class="theme-toggle-track" aria-hidden="true"><span class="theme-toggle-thumb"><span class="theme-sun">☀️</span><span class="theme-moon">🌙</span></span></span>
+      </button>
       <div class="header-actions">
         <button type="button" class="quiet-button" id="rail-button" aria-haspopup="dialog">KL Rail Guide <span aria-hidden="true">↗</span></button>
         <button type="button" class="quiet-button" id="trip-button">Trip details <span aria-hidden="true">↗</span></button>
