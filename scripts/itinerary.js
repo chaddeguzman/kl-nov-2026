@@ -75,6 +75,12 @@
   }, data.copy);
   function applyCopy() {
     document.title = data.copy.documentTitle;
+    if (data.brand?.src) {
+      const logo = document.getElementById('brand-logo');
+      logo.src = data.brand.src;
+      logo.hidden = false;
+      document.getElementById('site-icon').setAttribute('href', data.brand.src);
+    }
     for (const [selector, key] of Object.entries({
       '.wordmark':'brand','.hero .eyebrow':'eyebrow','#page-title':'pageTitle',
       '.trip-people':'people','.trip-stamp span:last-child':'tripStamp',
