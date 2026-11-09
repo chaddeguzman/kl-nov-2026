@@ -51,14 +51,19 @@ h1 {
   box-shadow: 0 4px 13px #8c438528;
 }
 .phase-column {
-  background: linear-gradient(165deg, #f5eaff 0%, #fffaff 48%);
+  background: linear-gradient(155deg, #d8edff 0%, #e8f4ff 52%, #f3f9ff 100%);
+  --line: #b8d2e6;
   box-shadow: 0 6px 20px #7b3c9010;
 }
 .phase-column:nth-child(2) {
-  background: linear-gradient(165deg, #ffe9f2 0%, #fffaff 48%);
+  background: linear-gradient(155deg, #ffe0b9 0%, #ffecd4 52%, #fff5e9 100%);
+  --line: #ecc9a1;
+  --rose: #944718;
 }
 .phase-column:nth-child(3) {
-  background: linear-gradient(165deg, #eee4fc 0%, #fffaff 48%);
+  background: linear-gradient(155deg, #43245f 0%, #321e49 52%, #21152f 100%);
+  --ink: #f4eafb; --muted: #d4c0df; --accent: #e0bafa; --line: #72528a; --soft: #48305c;
+  color: var(--ink);
 }
 .phase-heading h3 {
   color: var(--accent);
@@ -229,9 +234,9 @@ dialog.rail-dialog {
   [data-theme="dark"] .day-tab{background:#261b32}
   [data-theme="dark"] .day-tab:hover{background:#3b294a}
   [data-theme="dark"] .day-tab[aria-selected="true"]{background:linear-gradient(125deg,#704091,#90396f);border-color:#b680ca;color:#fff7ff}
-  [data-theme="dark"] .phase-column{background:linear-gradient(165deg,#32223f,#241a30 48%);box-shadow:0 6px 20px #0002}
-  [data-theme="dark"] .phase-column:nth-child(2){background:linear-gradient(165deg,#3c2335,#241a30 48%)}
-  [data-theme="dark"] .phase-column:nth-child(3){background:linear-gradient(165deg,#2c2341,#241a30 48%)}
+  [data-theme="dark"] .phase-column{background:linear-gradient(155deg,#173d5c,#1a3047 52%,#192536);--line:#46657d;box-shadow:0 6px 20px #0002}
+  [data-theme="dark"] .phase-column:nth-child(2){background:linear-gradient(155deg,#633b22,#442d20 52%,#2e211c);--line:#896143;--rose:#ffc48f}
+  [data-theme="dark"] .phase-column:nth-child(3){background:linear-gradient(155deg,#46205e,#321b46 52%,#21142f);--line:#72528a}
   [data-theme="dark"] .stop-card{border-bottom-color:var(--line)}
   [data-theme="dark"] .stop-card:hover{background:linear-gradient(105deg,#3c294c,#46283e)}
   [data-theme="dark"] .stop-number,[data-theme="dark"] .empty-note{color:var(--muted)}
@@ -242,4 +247,17 @@ dialog.rail-dialog {
   [data-theme="dark"] .close-button,[data-theme="dark"] .map-links a{border-color:var(--line)}
   [data-theme="dark"] .count,[data-theme="dark"] .map-links a,[data-theme="dark"] .notice{background:linear-gradient(110deg,#3a274a,#47283d)}
   [data-theme="dark"] .dialog-photo,[data-theme="dark"] .rail-map-viewport{background:#1a1422}
+}
+
+/* Evening remains a dark purple card in either theme, with matching controls. */
+@media screen {
+ .phase-column .stop-card{border-bottom-color:var(--line)}
+ .phase-column .stop-number{color:var(--muted)}
+ .phase-column:nth-child(3) .stop-number,.phase-column:nth-child(3) .empty-note{color:var(--muted)}
+ .phase-column:nth-child(3) .stop-card:hover{background:linear-gradient(105deg,#513166,#422a57)}
+ .phase-column:nth-child(3) .pager button{background:#3e284f}
+ .phase-column:nth-child(3) .pager button:hover:not(:disabled){background:#56366a}
+}
+@media print {
+ .phase-column:nth-child(n){background:white;box-shadow:none;--ink:#352044;--muted:#735c7c;--accent:#7543a0;--rose:#ab3675;--line:#e6d2ed;color:var(--ink)}
 }
