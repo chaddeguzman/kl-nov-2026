@@ -249,7 +249,7 @@ dialog.rail-dialog {
   [data-theme="dark"] .dialog-photo,[data-theme="dark"] .rail-map-viewport{background:#1a1422}
 }
 
-/* Evening remains a dark purple card in either theme, with matching controls. */
+/* Evening controls match the card surface; light mode overrides follow below. */
 @media screen {
  .phase-column .stop-card{border-bottom-color:var(--line)}
  .phase-column .stop-number{color:var(--muted)}
@@ -260,4 +260,12 @@ dialog.rail-dialog {
 }
 @media print {
  .phase-column:nth-child(n){background:white;box-shadow:none;--ink:#352044;--muted:#735c7c;--accent:#7543a0;--rose:#ab3675;--line:#e6d2ed;color:var(--ink)}
+}
+
+/* A softer evening card in light mode; dark mode retains its purple palette. */
+@media screen {
+ [data-theme="light"] .phase-column:nth-child(3){background:linear-gradient(155deg,#fbd5e5 0%,#fce4ee 52%,#fff1f6 100%);--ink:#000;--muted:#000;--accent:#000;--line:#deb6ca;--soft:#f8d9e7}
+ [data-theme="light"] .phase-column:nth-child(3) .stop-card:hover{background:linear-gradient(105deg,#f5c9dd,#fce0ed)}
+ [data-theme="light"] .phase-column:nth-child(3) .pager button{background:#fbe5ef}
+ [data-theme="light"] .phase-column:nth-child(3) .pager button:hover:not(:disabled){background:#f2c8dc}
 }
