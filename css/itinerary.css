@@ -269,3 +269,11 @@ dialog.rail-dialog {
  [data-theme="light"] .phase-column:nth-child(3) .pager button{background:#fbe5ef}
  [data-theme="light"] .phase-column:nth-child(3) .pager button:hover:not(:disabled){background:#f2c8dc}
 }
+/* Header actions are visible buttons; all modal dismiss controls share a centered X. */
+.header-actions{gap:8px}
+.header-actions .quiet-button{min-height:36px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--soft);font-weight:550;gap:6px;justify-content:center;white-space:nowrap;box-shadow:0 2px 5px #4d23620b}
+.header-actions .quiet-button:hover{border-color:var(--accent);filter:brightness(.97)}
+.close-button{position:relative;display:grid;place-items:center;flex:none;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border-radius:10px;font-size:0}
+.close-button::before,.close-button::after{content:"";position:absolute;left:50%;top:50%;width:18px;height:2px;border-radius:2px;background:currentColor;transform:translate(-50%,-50%) rotate(45deg);pointer-events:none}
+.close-button::after{transform:translate(-50%,-50%) rotate(-45deg)}
+@media(max-width:780px){.masthead{flex-wrap:wrap;padding-block:10px;gap:4px}.theme-toggle{order:1}.header-actions{width:100%;order:2;gap:6px}.header-actions .quiet-button{flex:1;min-width:0;padding:8px 6px;font-size:10px;gap:4px}.header-actions #questions-button{flex:1.35}.header-actions .quiet-button>span[aria-hidden=true]{display:none}}
