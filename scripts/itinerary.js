@@ -110,7 +110,7 @@ const timeRanges = (() => {
     footer: document.querySelector('.footer > span:first-child').textContent,
     footerHint: document.querySelector('.footer-hint').textContent,
     railTitle: 'KL Rail Guide', railKicker: 'MRT · LRT · KTM · ERL',
-    railHelp: 'Hold Ctrl and scroll up or down to zoom. Drag with the left mouse button to pan. On phones and tablets, pinch with two fingers to zoom and drag with one finger to pan.',
+    railHelp: 'Scroll up or down over the map to zoom. Drag with the left mouse button to pan. On phones and tablets, pinch with two fingers to zoom and drag with one finger to pan.',
     tripButton: 'Trip details', questionsButton: 'Owner questions',
     tripTitle: 'Four friends. Six days.', tripKicker: 'The essentials',
     questionsTitle: 'A few things to settle.', questionsKicker: 'Before we go',
@@ -208,20 +208,20 @@ const timeRanges = (() => {
     button.dataset.stop = stop.id;
     button.setAttribute('aria-haspopup', 'dialog');
     button.setAttribute('aria-label', `${stop.when.split(' · ')[0]}, ${titleFor(stop)}. Open details`);
-    const number = element('span', 'stop-number', String(day.stops.indexOf(stop) + 1).padStart(2, '0'));
-    number.setAttribute('aria-hidden', 'true');
+    const media = element('span', 'stop-media');
+    media.setAttribute('aria-hidden', 'true');
     if (stop.customPhoto && stop.photo) {
       const thumbnail = element('img', 'activity-thumb');
       thumbnail.src = stop.photo;
       thumbnail.alt = '';
-      number.replaceChildren(thumbnail);
+      media.replaceChildren(thumbnail);
       button.classList.add('has-photo');
     }
     const text = element('span', 'stop-text');
     text.append(element('span', 'stop-time', stop.when.split(' · ')[0]), element('span', 'stop-title', titleFor(stop)));
     const arrow = element('span', 'stop-arrow', '↗');
     arrow.setAttribute('aria-hidden', 'true');
-    button.append(number, text, arrow);
+    button.append(media, text, arrow);
     button.addEventListener('click', () => showStop(stop, day));
     return button;
   }
@@ -334,6 +334,7 @@ const timeRanges = (() => {
       try { localStorage.setItem(key, id); } catch { /* Optional preference, not a requirement. */ }
     }
     queueFit();
+    document.dispatchEvent(new Event('itinerary-day-change'));
   }
 
   data.days.forEach((day, i) => {
@@ -367,6 +368,12 @@ const timeRanges = (() => {
     openDialog(data.copy.railKicker, data.copy.railTitle);
     dialog.classList.add('rail-dialog');
     content.append(element('p', '', data.copy.railHelp));
+    if (data.railMap.sourceUrl) {
+      const source = element('p');
+      const link = element('a', '', data.railMap.sourceLabel || 'Source PDF');
+      link.href = data.railMap.sourceUrl;link.target = '_blank';link.rel = 'noopener noreferrer';
+      source.append(link);content.append(source);
+    }
 
     const toolbar = element('div', 'map-toolbar');
     toolbar.setAttribute('role', 'group');
@@ -384,7 +391,7 @@ const timeRanges = (() => {
     const viewport = element('div', 'rail-map-viewport');
     viewport.tabIndex = 0;
     viewport.setAttribute('role', 'region');
-    viewport.setAttribute('aria-label', 'KL rail map. Ctrl plus mouse wheel to zoom; drag to pan. Touch users can pinch to zoom and drag to pan. Keyboard users can use plus or minus to zoom and arrow keys to pan.');
+    viewport.setAttribute('aria-label', 'KL rail map. Mouse wheel to zoom; drag to pan. Touch users can pinch to zoom and drag to pan. Keyboard users can use plus or minus to zoom and arrow keys to pan.');
     const image = element('img', 'rail-map-image');
     image.draggable = false;
     image.alt = data.railMap.alt;
@@ -407,7 +414,7 @@ const timeRanges = (() => {
     }
 
     viewport.addEventListener('wheel', event => {
-      if (!event.ctrlKey || !image.naturalWidth) return;
+      if (!image.naturalWidth) return;
       event.preventDefault();
       const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? viewport.clientHeight : 1;
       zoomAt(zoom * Math.exp(-event.deltaY * unit * 0.002), event.clientX, event.clientY);
