@@ -1,6 +1,29 @@
 /* Offline itinerary controls. Travel facts live in the source itinerary. */
 (() => {
   'use strict';
+  /* Shared clock parsing for the viewer and its local desktop editor. */
+const timeRanges = (() => {
+ const pad=value=>String(value).padStart(2,'0');
+ const clock=(hour,minute,period)=>{
+  hour=Number(hour);minute=Number(minute);
+  if(minute>59||hour>(period?12:23)||(period&&hour<1))return null;
+  return (period?hour%12+(/PM/i.test(period)?12:0):hour)*60+minute;
+ };
+ function parse(value) {
+  const m=/^\s*(\d{1,2}):(\d{2})\s*(AM|PM)?\s*(?:[-–—]|to)\s*(\d{1,2}):(\d{2})\s*(AM|PM)?\s*(·[\s\S]*)?$/i.exec(value);
+  if(!m)return null;
+  const start=clock(m[1],m[2],m[3]||m[6]),end=clock(m[4],m[5],m[6]||m[3]);
+  // A missing AM/PM across noon or midnight is ambiguous; never guess a new time.
+  if(Boolean(m[3])!==Boolean(m[6])&&start>end)return null;
+  return start===null||end===null?null:{start,end,note:(m[7]||'').replace(/^·\s*/,'')};
+ }
+ function format(start,end,note='') {
+  const label=value=>{const hour=Math.floor(value/60);return pad(hour%12||12)+':'+pad(value%60)+' '+(hour<12?'AM':'PM');};
+  return label(start)+' - '+label(end)+(note?' · '+note:'');
+ }
+ return {parse,format,normalize(value){const range=parse(value);return range?format(range.start,range.end,range.note):value;}};
+})();
+
   const themeKey = 'reminiscence-kl-2026:theme:v1';
   const themeToggle = document.getElementById('theme-toggle');
   const systemTheme = matchMedia('(prefers-color-scheme: dark)');
@@ -22,6 +45,7 @@
     if (!chosenTheme) applyTheme(systemTheme.matches ? 'dark' : 'light');
   });
   const data = JSON.parse(document.getElementById('itinerary-data').textContent);
+  data.days.forEach(day=>day.stops.forEach(stop=>{stop.when=timeRanges.normalize(stop.when);}));
   const tabs = document.getElementById('day-tabs');
   const columns = document.getElementById('columns');
   const panel = document.getElementById('day-panel');
