@@ -111,10 +111,8 @@ const timeRanges = (() => {
     footerHint: document.querySelector('.footer-hint').textContent,
     railTitle: 'KL Rail Guide', railKicker: 'MRT · LRT · KTM · ERL',
     railHelp: 'Scroll up or down over the map to zoom. Drag with the left mouse button to pan. On phones and tablets, pinch with two fingers to zoom and drag with one finger to pan.',
-    tripButton: 'Trip details', questionsButton: 'Owner questions',
+    tripButton: 'Trip details',
     tripTitle: 'Four friends. Six days.', tripKicker: 'The essentials',
-    questionsTitle: 'A few things to settle.', questionsKicker: 'Before we go',
-    questionsIntro: 'Flights and apartment occupancy are established by the documents and Chad’s confirmation. These logistics and preferences remain open.',
     photoCaption: 'Photo reference from the original itinerary; imagery may be illustrative.'
   }, data.copy);
   function applyCopy() {
@@ -130,7 +128,7 @@ const timeRanges = (() => {
       '.trip-people':'people','.trip-stamp span:last-child':'tripStamp',
       '.footer > span:first-child':'footer','.footer-hint':'footerHint'
     })) document.querySelector(selector).textContent = data.copy[key];
-    for (const [id, key] of [['rail-button','railTitle'],['trip-button','tripButton'],['questions-button','questionsButton']]) {
+    for (const [id, key] of [['rail-button','railTitle'],['trip-button','tripButton']]) {
       document.getElementById(id).firstChild.textContent = data.copy[key] + ' ';
     }
   }
@@ -535,20 +533,6 @@ const timeRanges = (() => {
     dialog.scrollTop = 0;
   });
 
-  const questionsButton = document.getElementById('questions-button');
-  questionsButton.querySelector('.count').textContent = data.questions.length;
-  questionsButton.addEventListener('click', () => {
-    openDialog(data.copy.questionsKicker, data.copy.questionsTitle);
-    content.append(element('p', '', data.copy.questionsIntro));
-    const list = element('ol', 'owner-list');
-    data.questions.forEach(question => {
-      const item = element('li');
-      item.append(element('h3', '', question.title), bulletList(sentenceSteps(question.body)));
-      list.append(item);
-    });
-    content.append(list);
-    dialog.scrollTop = 0;
-  });
   close.addEventListener('click', () => dialog.close());
   dialog.addEventListener('click', event => {
     if (event.target !== dialog) return;
