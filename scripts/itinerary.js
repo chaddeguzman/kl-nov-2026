@@ -57,7 +57,7 @@ const timeRanges = (() => {
   const content = document.getElementById('dialog-content');
   const close = document.getElementById('close-dialog');
   const optional = document.getElementById('optional-button');
-  const desktop = window.matchMedia('(min-width:1000px)');
+  const scrollingLayout = window.matchMedia('(max-width:999px), (hover:none) and (pointer:coarse)');
   const printMedia = window.matchMedia('print');
   const key = 'reminiscence-kl-2026:selected-day:v1';
   let selected = data.days[0].id;
@@ -239,7 +239,7 @@ const timeRanges = (() => {
       group.list.replaceChildren(...group.cards);
       const sizes = group.cards.map(card => Math.ceil(card.getBoundingClientRect().height));
       const gap = parseFloat(getComputedStyle(group.list).gap) || 0;
-      const capacity = desktop.matches && innerHeight > 520 && !printing && !printMedia.matches
+      const capacity = !scrollingLayout.matches && innerHeight > 520 && !printing && !printMedia.matches
         ? group.list.clientHeight : Infinity;
       const pages = [[]];
       let used = 0;
@@ -326,6 +326,7 @@ const timeRanges = (() => {
     }
     if (save) {
       try { localStorage.setItem(key, id); } catch { /* Optional preference, not a requirement. */ }
+      if (scrollingLayout.matches) window.scrollTo(0, 0);
     }
     queueFit();
     document.dispatchEvent(new Event('itinerary-day-change'));
