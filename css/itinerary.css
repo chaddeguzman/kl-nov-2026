@@ -204,6 +204,7 @@ dialog.rail-dialog {
 }
 
 /* Step numbers share the activity gutter and stay legible across phase colours. */
+.stop-row { flex: none; min-width: 0; }
 .stop-number {
   align-self: center;
   text-align: center;

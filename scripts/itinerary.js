@@ -203,6 +203,7 @@ const timeRanges = (() => {
   }
 
   function stopCard(stop, day, position) {
+    const row = element('div', 'stop-row');
     const button = element('button', 'stop-card');
     button.type = 'button';
     button.dataset.stop = stop.id;
@@ -216,7 +217,8 @@ const timeRanges = (() => {
     arrow.setAttribute('aria-hidden', 'true');
     button.append(number, text, arrow);
     button.addEventListener('click', () => showStop(stop, day));
-    return button;
+    row.append(button);
+    return row;
   }
 
   function showGroupPage(group) {
@@ -254,7 +256,7 @@ const timeRanges = (() => {
       });
       group.pages = pages;
       group.page = Math.min(group.page, pages.length - 1);
-      if (focused) group.page = pages.findIndex(page => page.includes(focused));
+      if (focused) group.page = pages.findIndex(page => page.some(row => row.contains(focused)));
       showGroupPage(group);
       if (focused) focused.focus({ preventScroll: true });
     }
