@@ -200,26 +200,19 @@ const timeRanges = (() => {
     dialog.scrollTop = 0;
   }
 
-  function stopCard(stop, day) {
+  function stopCard(stop, day, position) {
     const button = element('button', 'stop-card');
     button.type = 'button';
     button.dataset.stop = stop.id;
     button.setAttribute('aria-haspopup', 'dialog');
     button.setAttribute('aria-label', `${stop.when.split(' · ')[0]}, ${titleFor(stop)}. Open details`);
-    const media = element('span', 'stop-media');
-    media.setAttribute('aria-hidden', 'true');
-    if (stop.customPhoto && stop.photo) {
-      const thumbnail = element('img', 'activity-thumb');
-      thumbnail.src = stop.photo;
-      thumbnail.alt = '';
-      media.replaceChildren(thumbnail);
-      button.classList.add('has-photo');
-    }
+    const number = element('span', 'stop-number', String(position).padStart(2, '0'));
+    number.setAttribute('aria-hidden', 'true');
     const text = element('span', 'stop-text');
     text.append(element('span', 'stop-time', stop.when.split(' · ')[0]), element('span', 'stop-title', titleFor(stop)));
     const arrow = element('span', 'stop-arrow', '↗');
     arrow.setAttribute('aria-hidden', 'true');
-    button.append(media, text, arrow);
+    button.append(number, text, arrow);
     button.addEventListener('click', () => showStop(stop, day));
     return button;
   }
@@ -298,7 +291,8 @@ const timeRanges = (() => {
       marker.setAttribute('aria-hidden', 'true');
       top.append(element('h3', '', phase), marker);
       const list = element('div', 'stop-list');
-      const cards = scheduled.filter(stop => stop.phase === phase).map(stop => stopCard(stop, day));
+      const cards = scheduled.filter(stop => stop.phase === phase)
+        .map((stop, index) => stopCard(stop, day, index + 1));
       const footer = element('div', 'column-footer');
       const caption = element('span', 'column-count');
       const pager = element('div', 'pager');
