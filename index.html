@@ -20,22 +20,24 @@
 </head>
 <body>
   <div class="page">
-    <header class="masthead">
-      <div class="brand"><img id="brand-logo" class="brand-logo" alt="" aria-hidden="true" src="assets/images/reminiscence-wordmark.png"><span class="wordmark">Reminiscence</span></div>
-      <button type="button" id="theme-toggle" class="theme-toggle" role="switch" aria-label="Dark mode" aria-checked="false" title="Switch to dark theme">
-        <span class="theme-toggle-track" aria-hidden="true"><span class="theme-toggle-thumb"><span class="theme-sun">☀️</span><span class="theme-moon">🌙</span></span></span>
-      </button>
-      <div class="header-actions">
-        <button type="button" class="quiet-button" id="rail-button" aria-haspopup="dialog">KL Rail Guide <span aria-hidden="true">↗</span></button>
-        <button type="button" class="quiet-button" id="trip-button">Trip details <span aria-hidden="true">↗</span></button>
-      </div>
-    </header>
-    <section class="hero" aria-labelledby="page-title">
-      <div><p class="eyebrow">KL, MALAYSIA • 29 NOV — 4 DEC 2026</p><h1 id="page-title">Reminiscence at Kuala Lumpur!</h1></div>
-      <div class="trip-stamp"><span class="trip-people"> </span><span> </span></div>
-    </section>
-    <main class="main">
+    <div class="trip-header">
+      <header class="masthead">
+        <div class="brand"><img id="brand-logo" class="brand-logo" alt="" aria-hidden="true" src="assets/images/reminiscence-wordmark.png"><span class="wordmark">Reminiscence</span></div>
+        <button type="button" id="theme-toggle" class="theme-toggle" role="switch" aria-label="Dark mode" aria-checked="false" title="Switch to dark theme">
+          <span class="theme-toggle-track" aria-hidden="true"><span class="theme-toggle-thumb"><span class="theme-sun">☀️</span><span class="theme-moon">🌙</span></span></span>
+        </button>
+        <div class="header-actions">
+          <button type="button" class="quiet-button" id="rail-button" aria-haspopup="dialog">KL Rail Guide <span aria-hidden="true">↗</span></button>
+          <button type="button" class="quiet-button" id="trip-button">Trip details <span aria-hidden="true">↗</span></button>
+        </div>
+      </header>
+      <section class="hero" aria-labelledby="page-title">
+        <div><p class="eyebrow">KL, MALAYSIA • 29 NOV — 4 DEC 2026</p><h1 id="page-title">Reminiscence at Kuala Lumpur!</h1></div>
+        <div class="trip-stamp"><span class="trip-people"> </span><span> </span></div>
+      </section>
       <nav class="day-tabs" id="day-tabs" role="tablist" aria-label="Choose an itinerary day"></nav>
+    </div>
+    <main class="main">
       <section class="day-panel" id="day-panel" role="tabpanel" aria-labelledby="tab-day1" tabindex="0">
         <div class="day-heading"><div><p class="eyebrow" id="day-date">Sun, 29 Nov · Day 1</p><h2 id="day-title" aria-live="polite">Arrival &amp; KLCC</h2><p class="day-subtitle" id="day-subtitle">Breakfast → Ombak → KLCC Park → Lunch at Suria → Kampung Bahru → Saloma Bridge → Twin Towers &amp; Lake Symphony</p></div><div class="day-tools"><span id="stop-count">13 stops · timings flexible</span><button type="button" id="optional-button" class="quiet-button" hidden="">Optional stop ↗</button></div></div>
         <div class="columns" id="columns"></div>
