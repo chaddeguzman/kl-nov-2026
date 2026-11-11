@@ -10,18 +10,22 @@ const timeRanges = (() => {
   return (period?hour%12+(/PM/i.test(period)?12:0):hour)*60+minute;
  };
  function parse(value) {
-  const m=/^\s*(\d{1,2}):(\d{2})\s*(AM|PM)?\s*(?:[-–—]|to)\s*(\d{1,2}):(\d{2})\s*(AM|PM)?\s*(·[\s\S]*)?$/i.exec(value);
+  const m=/^\s*(\d{1,2}):(\d{2})\s*(AM|PM)?\s*(?:[-–—]|to)\s*(\d{1,2}):(\d{2})\s*(AM|PM)?\s*$/i.exec(value);
   if(!m)return null;
   const start=clock(m[1],m[2],m[3]||m[6]),end=clock(m[4],m[5],m[6]||m[3]);
   // A missing AM/PM across noon or midnight is ambiguous; never guess a new time.
   if(Boolean(m[3])!==Boolean(m[6])&&start>end)return null;
-  return start===null||end===null?null:{start,end,note:(m[7]||'').replace(/^·\s*/,'')};
+  return start===null||end===null?null:{start,end};
  }
- function format(start,end,note='') {
+ function format(start,end) {
   const label=value=>{const hour=Math.floor(value/60);return pad(hour%12||12)+':'+pad(value%60)+' '+(hour<12?'AM':'PM');};
-  return label(start)+' - '+label(end)+(note?' · '+note:'');
+  return label(start)+' - '+label(end);
  }
- return {parse,format,normalize(value){const range=parse(value);return range?format(range.start,range.end,range.note):value;}};
+ return {parse,format,normalize(value){
+  const time=value.split('·',1)[0].trim();
+  const range=parse(time);
+  return range?format(range.start,range.end):time;
+ }};
 })();
 
   const themeKey = 'reminiscence-kl-2026:theme:v1';
@@ -112,8 +116,7 @@ const timeRanges = (() => {
     railTitle: 'KL Rail Guide', railKicker: 'MRT · LRT · KTM · ERL',
     railHelp: 'Scroll up or down over the map to zoom. Drag with the left mouse button to pan. On phones and tablets, pinch with two fingers to zoom and drag with one finger to pan.',
     tripButton: 'Trip details',
-    tripTitle: 'Four friends. Six days.', tripKicker: 'The essentials',
-    photoCaption: 'Photo reference from the original itinerary; imagery may be illustrative.'
+    tripTitle: 'Four friends. Six days.', tripKicker: 'The essentials'
   }, data.copy);
   function applyCopy() {
     document.title = data.copy.documentTitle;
@@ -178,14 +181,13 @@ const timeRanges = (() => {
     if (stop.photo) {
       const photo = element('img', 'dialog-photo');
       photo.src = stop.photo;
-      photo.alt = stop.photoAlt;
-      content.append(photo, element('p', 'photo-caption', stop.photoCaption ?? data.copy.photoCaption));
+      photo.alt = '';
+      content.append(photo);
     }
     if (stop.travel) {
       content.append(element('span', 'detail-label', 'Getting there'), bulletList(stop.travelSteps || [stop.travel], 'detail-steps travel-steps'));
     }
     if (stop.detail) content.append(element('span', 'detail-label', 'The plan'), bulletList(stop.detailSteps || [stop.detail], 'detail-steps plan-steps'));
-    if (stop.cost) content.append(element('span', 'detail-label', 'Budget estimate'), bulletList(sentenceSteps(stop.cost), 'detail-steps detail-cost'));
     if (stop.links.length) {
       const links = element('div', 'map-links');
       stop.links.forEach(link => {
@@ -205,11 +207,11 @@ const timeRanges = (() => {
     button.type = 'button';
     button.dataset.stop = stop.id;
     button.setAttribute('aria-haspopup', 'dialog');
-    button.setAttribute('aria-label', `${stop.when.split(' · ')[0]}, ${titleFor(stop)}. Open details`);
+    button.setAttribute('aria-label', `${stop.when}, ${titleFor(stop)}. Open details`);
     const number = element('span', 'stop-number', String(position).padStart(2, '0'));
     number.setAttribute('aria-hidden', 'true');
     const text = element('span', 'stop-text');
-    text.append(element('span', 'stop-time', stop.when.split(' · ')[0]), element('span', 'stop-title', titleFor(stop)));
+    text.append(element('span', 'stop-time', stop.when), element('span', 'stop-title', titleFor(stop)));
     const arrow = element('span', 'stop-arrow', '↗');
     arrow.setAttribute('aria-hidden', 'true');
     button.append(number, text, arrow);
