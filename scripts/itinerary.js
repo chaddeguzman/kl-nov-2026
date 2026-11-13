@@ -104,20 +104,17 @@ const timeRanges = (() => {
   };
   data.days.forEach(day => day.stops.forEach(stop => { stop.title ??= shortTitles[stop.id] || stop.name; }));
   const titleFor = stop => stop.title || stop.name;
-  data.copy = Object.assign({
+  const copyDefaults = {
     documentTitle: document.title,
     brand: document.querySelector('.wordmark').textContent,
     eyebrow: document.querySelector('.hero .eyebrow').textContent,
     pageTitle: document.getElementById('page-title').textContent,
-    people: document.querySelector('.trip-people').textContent,
-    tripStamp: document.querySelector('.trip-stamp span:last-child').textContent,
-    footer: document.querySelector('.footer > span:first-child').textContent,
-    footerHint: document.querySelector('.footer-hint').textContent,
     railTitle: 'KL Rail Guide', railKicker: 'MRT · LRT · KTM · ERL',
     railHelp: 'Scroll up or down over the map to zoom. Drag with the left mouse button to pan. On phones and tablets, pinch with two fingers to zoom and drag with one finger to pan.',
     tripButton: 'Trip details',
     tripTitle: 'Four friends. Six days.', tripKicker: 'The essentials'
-  }, data.copy);
+  };
+  data.copy = Object.fromEntries(Object.entries(copyDefaults).map(([key, value]) => [key, data.copy?.[key] ?? value]));
   function applyCopy() {
     document.title = data.copy.documentTitle;
     if (data.brand?.src) {
@@ -127,9 +124,7 @@ const timeRanges = (() => {
       document.getElementById('site-icon').setAttribute('href', data.brand.src);
     }
     for (const [selector, key] of Object.entries({
-      '.wordmark':'brand','.hero .eyebrow':'eyebrow','#page-title':'pageTitle',
-      '.trip-people':'people','.trip-stamp span:last-child':'tripStamp',
-      '.footer > span:first-child':'footer','.footer-hint':'footerHint'
+      '.wordmark':'brand','.hero .eyebrow':'eyebrow','#page-title':'pageTitle'
     })) document.querySelector(selector).textContent = data.copy[key];
     for (const [id, key] of [['rail-button','railTitle'],['trip-button','tripButton']]) {
       document.getElementById(id).firstChild.textContent = data.copy[key] + ' ';
@@ -223,7 +218,9 @@ const timeRanges = (() => {
 
   function showGroupPage(group) {
     const cards = group.pages[group.page] || [];
-    group.list.replaceChildren(...cards);
+    if (group.list.firstElementChild !== cards[0] || group.list.childElementCount !== cards.length) {
+      group.list.replaceChildren(...cards);
+    }
     const first = group.pages.slice(0, group.page).reduce((n, page) => n + page.length, 0) + 1;
     group.caption.textContent = group.pages.length > 1
       ? `${first}–${first + cards.length - 1} of ${group.cards.length} stops`
@@ -237,6 +234,12 @@ const timeRanges = (() => {
   function fitColumns() {
     for (const group of groups) {
       if (!group.cards.length) continue;
+      if (document.body.classList.contains('god-mode')) {
+        group.pages = [group.cards];
+        group.page = 0;
+        showGroupPage(group);
+        continue;
+      }
       const focused = group.list.contains(document.activeElement) ? document.activeElement : null;
       group.list.replaceChildren(...group.cards);
       const sizes = group.cards.map(card => Math.ceil(card.getBoundingClientRect().height));
@@ -300,6 +303,7 @@ const timeRanges = (() => {
       const footer = element('div', 'column-footer');
       const caption = element('span', 'column-count');
       const pager = element('div', 'pager');
+      pager.hidden = true;
       const previous = element('button', '', '←');
       previous.type = 'button';
       previous.setAttribute('aria-label', `Previous ${phase} stops`);
