@@ -104,6 +104,7 @@ const timeRanges = (() => {
   };
   data.days.forEach(day => day.stops.forEach(stop => { stop.title ??= shortTitles[stop.id] || stop.name; }));
   const titleFor = stop => stop.title || stop.name;
+  const timingFor = stop => stop.timingNote ? `${stop.when} · ${stop.timingNote}` : stop.when;
   const copyDefaults = {
     documentTitle: document.title,
     brand: document.querySelector('.wordmark').textContent,
@@ -171,7 +172,7 @@ const timeRanges = (() => {
 
   function showStop(stop, day) {
     openDialog(`${day.date} · ${stop.category || 'Travel'} · 2026`, titleFor(stop));
-    content.append(element('div', 'dialog-time', stop.when));
+    content.append(element('div', 'dialog-time', timingFor(stop)));
     if (stop.name !== titleFor(stop)) content.append(element('p', 'detail-place', stop.name));
     if (stop.photo) {
       const photo = element('img', 'dialog-photo');
@@ -203,11 +204,11 @@ const timeRanges = (() => {
     button.type = 'button';
     button.dataset.stop = stop.id;
     button.setAttribute('aria-haspopup', 'dialog');
-    button.setAttribute('aria-label', `${stop.when}, ${titleFor(stop)}. Open details`);
+    button.setAttribute('aria-label', `${timingFor(stop)}, ${titleFor(stop)}. Open details`);
     const number = element('span', 'stop-number', String(position).padStart(2, '0'));
     number.setAttribute('aria-hidden', 'true');
     const text = element('span', 'stop-text');
-    text.append(element('span', 'stop-time', stop.when), element('span', 'stop-title', titleFor(stop)));
+    text.append(element('span', 'stop-time', timingFor(stop)), element('span', 'stop-title', titleFor(stop)));
     const arrow = element('span', 'stop-arrow', '↗');
     arrow.setAttribute('aria-hidden', 'true');
     button.append(number, text, arrow);
