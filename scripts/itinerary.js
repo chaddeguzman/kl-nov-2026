@@ -97,10 +97,11 @@ const timeRanges = (() => {
     'd5-s5': 'Jamboo Café', 'd5-s6': 'REXKL & BookXcess',
     'd5-s7': 'I ♥ KL sculpture', 'd5-s8': 'Merdeka Square',
     'd5-s9': 'Dinner & rest near Pasar Seni', 'd5-s10': 'River of Life night walk',
-    'd6-s1': 'Breakfast, packing & checkout', 'd6-s2': 'The Exchange TRX',
-    'd6-s3': 'Lindt & chocolate shopping', 'd6-s4': 'Quick TRX rooftop photos',
-    'd6-s5': 'Return & collect luggage', 'd6-s6': 'Noon transfer to KLIA Terminal 2',
-    'd6-s7': '2:20 PM · airport formalities & lunch', 'd6-s8': 'Boarding · flight departs 6:20 PM'
+    'd6-s1': 'Wake up & get ready', 'd6-s9': 'Breakfast at Oriental Kopi',
+    'd6-s2': 'Sightseeing walk to The Exchange TRX', 'd6-s4': 'Photos before the shops open',
+    'd6-s3': 'Lindt & optional mall browsing', 'd6-s5': 'Return to Sky Suites for noon checkout',
+    'd6-s6': 'Grab to KL Sentral', 'd6-s10': 'KLIA Ekspres to Terminal 2',
+    'd6-s7': 'Airport lunch & departure formalities', 'd6-s8': 'AirAsia AK 584 to Manila'
   };
   data.days.forEach(day => day.stops.forEach(stop => { stop.title ??= shortTitles[stop.id] || stop.name; }));
   const titleFor = stop => stop.title || stop.name;
@@ -324,10 +325,7 @@ const timeRanges = (() => {
         list.append(...cards);
         groups.push(group);
       } else {
-        const message = day.id === 'day6' && phase === 'evening'
-          ? 'Flight home at 6:20 PM. Be inside Terminal 2 by 2:20 PM for a four-hour buffer.'
-          : 'A little breathing room. Let the day unfold.';
-        list.append(element('p', 'empty-note', message));
+        list.append(element('p', 'empty-note', 'A little breathing room. Let the day unfold.'));
         footer.hidden = true;
       }
     }
@@ -517,7 +515,7 @@ const timeRanges = (() => {
       ['Flying out', 'Cebu Pacific 5J 501. Manila NAIA Terminal 3, Nov 28 at 8:05 PM → KLIA Terminal 2, Nov 29 at 12:10 AM.'],
       ['Flying home', 'Updated by Chad: AirAsia AK 584. KLIA Terminal 2, Dec 4 at 6:20 PM → Manila NAIA Terminal 1, Dec 4 at 10:25 PM. Both are on Dec 4.'],
       ['Arrival night', 'The Nov 28 booking covers the arrival night. The voucher requests 1–2 AM check-in the next day, subject to availability. Host acceptance and access after 2 AM still need confirmation.'],
-      ['Departure buffer', 'Leave Sky Suites at 12:00 PM on Dec 4. Be inside KLIA Terminal 2 by 2:20 PM, four hours before the 6:20 PM departure. Lunch is at the airport. Confirm airline check-in and boarding deadlines.'],
+      ['Departure transfer', 'Check out of Sky Suites at noon and take a Grab to KL Sentral. Aim for the 1:00 PM KLIA Ekspres, scheduled to arrive at Terminal 2 at 1:33 PM. Lunch is at the airport before bag drop and boarding.'],
       ['Bags & shopping', 'Return documents show 7 kg carry-on per passenger; no checked-baggage add-on is shown. Check later purchases and current allowances before shopping.'],
       ['Melaka tour', 'English join-in tour with professional guide, local lunch and round-trip transfers. Sky Suites KLCC pickup accepted, 7:45–8:15 AM. River walk only. Depart Melaka at 4 PM; expected KL return at 6 PM, traffic permitting. Confirm the return drop-off point.'],
       ['Budget & photos', 'Original costs are planning estimates, using RM1 ≈ ₱14. Confirm whether transport prices are per person or per vehicle. Embedded photo references may be illustrative.']
