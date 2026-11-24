@@ -308,3 +308,40 @@ dialog.rail-dialog {
   .trip-header h1 { font-size: 24px; margin-top: 2px; }
   .trip-header .day-tab { padding-block: 5px; }
 }
+
+/* A star remains visible in print and when background colors are suppressed. */
+:root {
+  --highlight-surface: #e2f4e6;
+  --highlight-hover: #d3eedb;
+  --highlight-ink: #164828;
+}
+.stop-highlighted .stop-title-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4em;
+}
+.stop-highlighted .stop-title { overflow-wrap: anywhere; }
+.stop-highlight-star { flex: none; color: var(--highlight-ink); }
+.dialog-content .detail-highlight {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45em;
+  width: fit-content;
+  margin: 0 0 12px;
+  color: var(--highlight-ink);
+  font-size: 12px;
+  font-weight: 650;
+}
+@media screen {
+  :root[data-theme="dark"] {
+    --highlight-surface: #253f32;
+    --highlight-hover: #304d3d;
+    --highlight-ink: #caf0d4;
+  }
+  .phase-column .stop-card.stop-highlighted {
+    background: var(--highlight-surface);
+    color: var(--highlight-ink);
+  }
+  .phase-column:nth-child(n) .stop-card.stop-highlighted:hover { background: var(--highlight-hover); }
+  .stop-highlighted :is(.stop-number,.stop-time,.stop-arrow) { color: var(--highlight-ink); }
+}
