@@ -106,6 +106,7 @@ const timeRanges = (() => {
   data.days.forEach(day => day.stops.forEach(stop => { stop.title ??= shortTitles[stop.id] || stop.name; }));
   const titleFor = stop => stop.title || stop.name;
   const timingFor = stop => stop.timingNote ? `${stop.when} · ${stop.timingNote}` : stop.when;
+  const highlightLabel = 'Highlighted activity';
   const copyDefaults = {
     documentTitle: document.title,
     brand: document.querySelector('.wordmark').textContent,
@@ -174,6 +175,13 @@ const timeRanges = (() => {
   function showStop(stop, day) {
     openDialog(`${day.date} · ${stop.category || 'Travel'} · 2026`, titleFor(stop));
     content.append(element('div', 'dialog-time', timingFor(stop)));
+    if (stop.highlighted === true) {
+      const badge = element('p', 'detail-highlight');
+      const star = element('span', '', '★');
+      star.setAttribute('aria-hidden', 'true');
+      badge.append(star, highlightLabel);
+      content.append(badge);
+    }
     if (stop.name !== titleFor(stop)) content.append(element('p', 'detail-place', stop.name));
     if (stop.photo) {
       const photo = element('img', 'dialog-photo');
@@ -199,20 +207,36 @@ const timeRanges = (() => {
     dialog.scrollTop = 0;
   }
 
+  function applyStopHighlight(button, stop) {
+    const highlighted = stop.highlighted === true;
+    button.classList.toggle('stop-highlighted', highlighted);
+    button.setAttribute('aria-label', `${timingFor(stop)}, ${titleFor(stop)}.${highlighted ? ` ${highlightLabel}.` : ''} Open details`);
+    const star = button.querySelector('.stop-highlight-star');
+    if (highlighted && !star) {
+      const mark = element('span', 'stop-highlight-star', '★');
+      mark.setAttribute('aria-hidden', 'true');
+      button.querySelector('.stop-title').before(mark);
+    } else if (!highlighted) {
+      star?.remove();
+    }
+  }
+
   function stopCard(stop, day, position) {
     const row = element('div', 'stop-row');
     const button = element('button', 'stop-card');
     button.type = 'button';
     button.dataset.stop = stop.id;
     button.setAttribute('aria-haspopup', 'dialog');
-    button.setAttribute('aria-label', `${timingFor(stop)}, ${titleFor(stop)}. Open details`);
     const number = element('span', 'stop-number', String(position).padStart(2, '0'));
     number.setAttribute('aria-hidden', 'true');
     const text = element('span', 'stop-text');
-    text.append(element('span', 'stop-time', timingFor(stop)), element('span', 'stop-title', titleFor(stop)));
+    const title = element('span', 'stop-title-line');
+    title.append(element('span', 'stop-title', titleFor(stop)));
+    text.append(element('span', 'stop-time', timingFor(stop)), title);
     const arrow = element('span', 'stop-arrow', '↗');
     arrow.setAttribute('aria-hidden', 'true');
     button.append(number, text, arrow);
+    applyStopHighlight(button, stop);
     button.addEventListener('click', () => showStop(stop, day));
     row.append(button);
     return row;
