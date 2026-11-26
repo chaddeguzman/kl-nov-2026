@@ -388,6 +388,15 @@ const timeRanges = (() => {
     tabs.append(button);
   });
 
+  document.getElementById('trip-notes-button').addEventListener('click', () => {
+    const notes = document.getElementById('local-trip-notes') || document.getElementById('public-trip-notes');
+    openDialog('Kuala Lumpur 2026', 'Trip Non-Negotiables');
+    const sections = element('div', 'trip-notes');
+    sections.append(notes.content.cloneNode(true));
+    content.append(sections);
+    dialog.scrollTop = 0;
+  });
+
   document.getElementById('rail-button').addEventListener('click', () => {
     openDialog(data.copy.railKicker, data.copy.railTitle);
     dialog.classList.add('rail-dialog');

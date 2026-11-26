@@ -112,6 +112,11 @@ dialog {
   h1 { background: none; -webkit-text-fill-color: var(--ink); }
 }
 
+/* Trip notes use the same type scale as other dialog content. */
+.trip-notes h3{font-size:14px;margin:18px 0 8px}
+.trip-notes ul,.trip-notes ol{padding-inline-start:22px;color:var(--muted);font-size:13px;line-height:1.65}
+.trip-notes li + li{margin-top:6px}
+
 /* Short instruction lists keep route steps easy to scan in each dialog. */
 .detail-steps {
   margin: 8px 0 0;

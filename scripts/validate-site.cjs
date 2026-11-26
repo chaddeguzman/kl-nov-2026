@@ -5,6 +5,7 @@ function validate(root){
  const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
  const js=fs.readFileSync(path.join(root,'scripts/itinerary.js'),'utf8');
  const css=fs.readFileSync(path.join(root,'css/itinerary.css'),'utf8');
+ if (/<template\b[^>]*\bid=["']local-trip-notes["']/i.test(html)) throw Error('Private trip notes in index.html');
  for(const [name,text] of [['index.html',html],['scripts/itinerary.js',js],['css/itinerary.css',css]]){
   if(/(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_|sk-proj-|-----BEGIN .*PRIVATE KEY|[A-Z]:[\\/]Users[\\/])/i.test(text))throw Error('Potential credential or private local path in '+name);
   if(/(?:id=["']local-editor|contenteditable|"photoSource"|"photoCrop"|createInlineItineraryAuthoring|setupCommitPublisher|klItineraryEditor)/.test(text))throw Error('Local editing code or private crop metadata in '+name);
